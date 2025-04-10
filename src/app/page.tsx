@@ -12,14 +12,68 @@ import Logo from "../../public/images/logo1.svg"
 import WhiteLogo from "../../public/images/white-logo.svg"
 import LogoExtended from "../../public/images/logo-extensa.svg"
 import { useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 export default function Home() {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    whatsapp: '',
+    specialty: '',
+    otherSpecialty: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const handleScrollToForm = () => {
     const formSection = document.getElementById('form-section');
     if (formSection) {
       formSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+
+    try {
+      const { error } = await supabase
+        .from('subscriptions')
+        .insert([
+          {
+            name: formData.name,
+            email: formData.email,
+            whatsapp: formData.whatsapp,
+            specialty: formData.specialty === 'outros' ? formData.otherSpecialty : formData.specialty,
+            created_at: new Date().toISOString()
+          }
+        ]);
+
+      if (error) throw error;
+
+      setSubmitStatus('success');
+      setFormData({ 
+        name: '', 
+        email: '', 
+        whatsapp: '', 
+        specialty: '', 
+        otherSpecialty: '' 
+      });
+    } catch (error) {
+      console.error('Erro ao salvar inscrição:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -54,8 +108,14 @@ export default function Home() {
           </div>
 
           <div className="flex-1">
-            <div className="w-full h-[492px]">
-              <Image src={HeroImage} alt="Dashboard" width={1000} height={1000}></Image>
+            <div className="w-full h-[492px] relative">
+              <Image 
+                src={HeroImage} 
+                alt="Dashboard" 
+                width={1000} 
+                height={1000}
+                className="object-contain animate-float"
+              />
             </div>
           </div>
         </div>
@@ -484,14 +544,14 @@ export default function Home() {
                     onClick={() => setActiveFaq(activeFaq === 4 ? null : 4)}
                   >
                     <h3 className="font-semibold text-xl">
-                      Preciso ter o canva Pro?
+                      Para quem é o Content Boutique?
                     </h3>
                     <span className="text-2xl">{activeFaq === 4 ? '−' : '+'}</span>
                   </button>
                   {activeFaq === 4 && (
                     <div className="px-8 pb-6">
                       <p className="text-gray-600">
-                        Não, nossos conteúdos são feitos com elementos gratuitos, mesmo com o canva free, poderá desfrutar da plataforma tranquilamente.
+                        Para psicólogos, psicanalistas, terapeutas e outros profissionais de saúde mental, que desejam criar conteúdo de qualidade para suas redes sociais, sem perder horas com isso.
                       </p>
                     </div>
                   )}
@@ -503,11 +563,30 @@ export default function Home() {
                     onClick={() => setActiveFaq(activeFaq === 5 ? null : 5)}
                   >
                     <h3 className="font-semibold text-xl">
-                      Como faço para começar?
+                      Preciso ter o canva Pro?
                     </h3>
                     <span className="text-2xl">{activeFaq === 5 ? '−' : '+'}</span>
                   </button>
                   {activeFaq === 5 && (
+                    <div className="px-8 pb-6">
+                      <p className="text-gray-600">
+                        Não, nossos conteúdos são feitos com elementos gratuitos, mesmo com o canva free, poderá desfrutar da plataforma tranquilamente.
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                <div className="bg-white rounded-[32px] border-2 border-black overflow-hidden">
+                  <button
+                    className="w-full px-8 py-6 text-left flex justify-between items-center hover:bg-gray-50 transition-colors"
+                    onClick={() => setActiveFaq(activeFaq === 6 ? null : 6)}
+                  >
+                    <h3 className="font-semibold text-xl">
+                      Como faço para começar?
+                    </h3>
+                    <span className="text-2xl">{activeFaq === 6 ? '−' : '+'}</span>
+                  </button>
+                  {activeFaq === 6 && (
                     <div className="px-8 pb-6">
                       <p className="text-gray-600">
                         Basta se inscrever na lista VIP e aguardar o lançamento. Você receberá um desconto especial e será um dos primeiros a ter acesso à plataforma.
@@ -534,31 +613,85 @@ export default function Home() {
               <h3 className="text-2xl font-semibold mb-8">
                 Entre na lista de espera receba <span className="font-bold text-red-600">20% de desconto</span> e comece a criar conteúdos incríveis.
               </h3>
-              <form className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <input
                     type="text"
-                    placeholder="Seu nome"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    placeholder="Seu nome completo"
                     className="w-full px-6 py-4 rounded-full border-2 border-black focus:outline-none focus:ring-2 focus:ring-[#FF580D] text-lg"
+                    required
                   />
                 </div>
                 <div>
                   <input
                     type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
                     placeholder="Seu Email"
                     className="w-full px-6 py-4 rounded-full border-2 border-black focus:outline-none focus:ring-2 focus:ring-[#FF580D] text-lg"
+                    required
                   />
                 </div>
                 <div>
                   <input
                     type="text"
+                    name="whatsapp"
+                    value={formData.whatsapp}
+                    onChange={handleInputChange}
                     placeholder="Seu WhatsApp"
                     className="w-full px-6 py-4 rounded-full border-2 border-black focus:outline-none focus:ring-2 focus:ring-[#FF580D] text-lg"
+                    required
                   />
                 </div>
-                <button className="w-full bg-black text-white px-6 py-4 rounded-full hover:bg-gray-800 transition-colors text-lg font-medium">
-                  Inscrever-se
+                <div>
+                  <select
+                    name="specialty"
+                    value={formData.specialty}
+                    onChange={handleInputChange}
+                    className="w-full px-6 py-4 rounded-full border-2 border-black focus:outline-none focus:ring-2 focus:ring-[#FF580D] text-lg appearance-none bg-white"
+                    required
+                  >
+                    <option value="">Selecione sua especialidade</option>
+                    <option value="Psicologo">Psicólogo</option>
+                    <option value="Psiquiatra">Psiquiatra</option>
+                    <option value="Psicanalista">Psicanalista</option>
+                    <option value="Terapeuta Holistico">Terapeuta Holístico</option>
+                    <option value="Constelador">Constelador</option>
+                    <option value="Terapeuta Ocupacional">Terapeuta Ocupacional</option>
+                    <option value="Terapeuta TRG">Terapeuta TRG</option>
+                    <option value="outros">Outros</option>
+                  </select>
+                </div>
+                {formData.specialty === 'outros' && (
+                  <div>
+                    <input
+                      type="text"
+                      name="otherSpecialty"
+                      value={formData.otherSpecialty}
+                      onChange={handleInputChange}
+                      placeholder="Digite sua especialidade"
+                      className="w-full px-6 py-4 rounded-full border-2 border-black focus:outline-none focus:ring-2 focus:ring-[#FF580D] text-lg"
+                      required
+                    />
+                  </div>
+                )}
+                <button 
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full bg-black text-white px-6 py-4 rounded-full hover:bg-gray-800 transition-colors text-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? 'Enviando...' : 'Inscrever-se'}
                 </button>
+                {submitStatus === 'success' && (
+                  <p className="text-green-600 text-center">Inscrição realizada com sucesso!</p>
+                )}
+                {submitStatus === 'error' && (
+                  <p className="text-red-600 text-center">Erro ao realizar inscrição. Tente novamente.</p>
+                )}
               </form>
             </div>
 
