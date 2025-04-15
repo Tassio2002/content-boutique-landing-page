@@ -410,7 +410,9 @@ export default function Home() {
 
                 <div className="flex flex-col md:flex-row items-start gap-4 md:gap-8 pb-4 md:pb-6 border-b border-gray-200">
                   <h3 className="font-semibold text-lg md:text-xl w-full md:w-1/3">Parar não é uma opção</h3>
-                  <p className="text-gray-600 flex-1">Tanto os templates como os agente de IA, são constantemente atualizados para garantir que você tenha o melhor conteúdo.</p>
+                  <p className="text-gray-600 flex-1">
+                    Tanto os templates como os agentes de IA, são constantemente atualizados para garantir que você tenha o melhor conteúdo.
+                  </p>
                 </div>
               </div>
               <div className="flex justify-end mt-6">
@@ -467,7 +469,7 @@ export default function Home() {
                     </div>
                     <div className="flex-1 pt-1">
                       <p className="text-base md:text-lg text-center md:text-left">
-                        Você clica em "gerar conteúdo"
+                        Você clica em &ldquo;gerar conteúdo&ldquo;
                       </p>
                     </div>
                   </div>
