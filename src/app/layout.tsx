@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Content Boutique: Crie Conteúdo para Instagram Psicólogos",
+  title: "Content Boutique: Crie Conteúdo no Instagram para Psicólogos",
   description: "Gere roteiros únicos e templates Canva para Instagram em minutos. Feito para psicólogos e terapeutas."
 };
 
