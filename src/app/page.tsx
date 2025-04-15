@@ -46,6 +46,27 @@ const ScrollReveal = ({
   );
 };
 
+// Funções de validação
+const validateName = (name: string) => {
+  const nameParts = name.trim().split(' ');
+  return nameParts.length >= 2 && nameParts[0].length >= 2 && nameParts[1].length >= 2;
+};
+
+const formatWhatsApp = (value: string) => {
+  // Remove tudo que não for número
+  const numbers = value.replace(/\D/g, '');
+  
+  // Aplica a formatação
+  if (numbers.length <= 2) return numbers;
+  if (numbers.length <= 7) return `${numbers.slice(0, 2)} ${numbers.slice(2)}`;
+  return `${numbers.slice(0, 2)} ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`;
+};
+
+const validateWhatsApp = (whatsapp: string) => {
+  const numbers = whatsapp.replace(/\D/g, '');
+  return numbers.length === 11;
+};
+
 export default function Home() {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [formData, setFormData] = useState({
@@ -55,37 +76,107 @@ export default function Home() {
     specialty: '',
     otherSpecialty: ''
   });
+  const [formErrors, setFormErrors] = useState({
+    name: '',
+    email: '',
+    whatsapp: ''
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const handleScrollToForm = () => {
-    const formSection = document.getElementById('form-section');
-    if (formSection) {
-      formSection.scrollIntoView({ behavior: 'smooth' });
+    const formTitle = document.getElementById('form-title');
+    if (formTitle) {
+      const offset = 0; // Ajuste fino para melhor posicionamento
+      const elementPosition = formTitle.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+      
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
     }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    
+    // Limpa o erro do campo quando o usuário começa a digitar
+    setFormErrors(prev => ({
       ...prev,
-      [name]: value
+      [name]: ''
     }));
+
+    if (name === 'whatsapp') {
+      // Aplica a formatação do WhatsApp
+      setFormData(prev => ({
+        ...prev,
+        [name]: formatWhatsApp(value)
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
+  };
+
+  const validateForm = () => {
+    const errors = {
+      name: '',
+      email: '',
+      whatsapp: ''
+    };
+
+    // Validação do nome
+    if (!validateName(formData.name)) {
+      errors.name = 'Digite seu nome completo (nome e sobrenome)';
+    }
+
+    // Validação do WhatsApp
+    if (!validateWhatsApp(formData.whatsapp)) {
+      errors.whatsapp = 'Digite um número válido ex: (11) 91234-4321';
+    }
+
+    setFormErrors(errors);
+    return !Object.values(errors).some(error => error !== '');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Valida o formulário antes de enviar
+    if (!validateForm()) {
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitStatus('idle');
 
     try {
+      // Verifica se o email já existe
+      const { data: existingUser } = await supabase
+        .from('subscriptions')
+        .select('email')
+        .eq('email', formData.email)
+        .single();
+
+      if (existingUser) {
+        setFormErrors(prev => ({
+          ...prev,
+          email: 'Este email já está cadastrado.'
+        }));
+        setIsSubmitting(false);
+        return;
+      }
+
       const { error } = await supabase
         .from('subscriptions')
         .insert([
           {
-            name: formData.name,
-            email: formData.email,
-            whatsapp: formData.whatsapp,
+            name: formData.name.trim(),
+            email: formData.email.toLowerCase(),
+            whatsapp: formData.whatsapp.replace(/\D/g, ''),
             specialty: formData.specialty === 'outros' ? formData.otherSpecialty : formData.specialty,
             created_at: new Date().toISOString()
           }
@@ -141,13 +232,13 @@ export default function Home() {
 
           <ScrollReveal delay={0.2} className="flex-1 w-full md:w-auto">
             <div className="w-full h-[250px] sm:h-[300px] md:h-[492px] max-w-[560px] mx-auto relative">
-              <Image
+        <Image
                 src={HeroImage}
                 alt="Dashboard"
                 width={560}
                 height={560}
                 className="object-contain animate-float"
-                priority
+          priority
                 style={{ maxHeight: '100%' }}
               />
             </div>
@@ -538,7 +629,7 @@ export default function Home() {
 
               {/* Image */}
               <ScrollReveal delay={0.2} className="w-full md:w-1/2 h-[300px] md:h-[500px] mt-8 md:mt-0">
-                <Image
+            <Image
                   src={UserFlowImage}
                   alt="Dashboard"
                   width={500}
@@ -580,15 +671,15 @@ export default function Home() {
             </div>
 
             {/* Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <ScrollReveal>
                 <div className="bg-[#F1FFF8] p-10 rounded-[32px] min-h-[280px] border-black border-2">
                   <div className="space-y-6">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-between">
                       <h3 className="text-2xl font-semibold">
                         Conteúdo Único
                       </h3>
-                      <Image src={Card1Image} alt="Conteúdo Único" width={128}></Image>
+                      <Image src={Card1Image} alt="Conteúdo Único" width={64}></Image>
                     </div>
 
                     <p className="text-gray-800 text-lg">
@@ -601,11 +692,11 @@ export default function Home() {
               <ScrollReveal delay={0.2}>
                 <div className="bg-black text-white p-10 rounded-[32px] min-h-[280px]">
                   <div className="space-y-6">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-between">
                       <h3 className="text-2xl font-semibold">
                         Templates Exclusivos
                       </h3>
-                      <Image src={Card2Image} alt="Team Accountability Framework" width={99}></Image>
+                      <Image src={Card2Image} alt="Team Accountability Framework" width={64}></Image>
                     </div>
                     <p className="text-lg">
                       Nossos templates são únicos, pois, são <span className="font-semibold">feitos do zero</span> por nossa especialista em design de posts para profissionais de saúde mental.
@@ -617,11 +708,11 @@ export default function Home() {
               <ScrollReveal delay={0.4}>
                 <div className="bg-[#F1FFF8] p-10 rounded-[32px] min-h-[280px] border-black border-2">
                   <div className="space-y-6">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-between">
                       <h3 className="text-2xl font-semibold">
                         Nunca foi tão fácil
                       </h3>
-                      <Image src={Card3Image} alt="Team Accountability Framework" width={99}></Image>
+                      <Image src={Card3Image} alt="Team Accountability Framework" width={64}></Image>
                     </div>
                     <p className="text-gray-800 text-lg">
                       Nossa plataforma está sendo desenvolvida por uma empresa especializada em Agentes de IA e experiência do usuário. Nosso objetivo é entregar para você <span className="font-semibold">uma plataforma intuitiva e fácil de usar</span>.
@@ -871,7 +962,7 @@ export default function Home() {
       <section id="form-section" className="bg-[#F1FFF8] py-16 md:py-24">
         <div className="container mx-auto px-4 max-w-[1200px]">
           <ScrollReveal>
-            <h2 className="text-5xl md:text-6xl font-bold text-center mb-16">
+            <h2 id="form-title" className="text-5xl md:text-6xl font-bold text-center mb-16">
               Crie Conteúdo de qualidade <br />sem Perder Tempo
             </h2>
           </ScrollReveal>
@@ -889,9 +980,12 @@ export default function Home() {
                     value={formData.name}
                     onChange={handleInputChange}
                     placeholder="Seu nome completo"
-                    className="w-full px-6 py-4 rounded-full border-2 border-black focus:outline-none focus:ring-2 focus:ring-[#FF580D] text-lg"
+                    className={`w-full px-6 py-4 rounded-full border-2 ${formErrors.name ? 'border-red-500' : 'border-black'} focus:outline-none focus:ring-2 focus:ring-[#FF580D] text-lg`}
                     required
                   />
+                  {formErrors.name && (
+                    <p className="text-red-500 text-sm mt-2 ml-4">{formErrors.name}</p>
+                  )}
                 </div>
                 <div>
                   <input
@@ -900,9 +994,12 @@ export default function Home() {
                     value={formData.email}
                     onChange={handleInputChange}
                     placeholder="Seu Email"
-                    className="w-full px-6 py-4 rounded-full border-2 border-black focus:outline-none focus:ring-2 focus:ring-[#FF580D] text-lg"
+                    className={`w-full px-6 py-4 rounded-full border-2 ${formErrors.email ? 'border-red-500' : 'border-black'} focus:outline-none focus:ring-2 focus:ring-[#FF580D] text-lg`}
                     required
                   />
+                  {formErrors.email && (
+                    <p className="text-red-500 text-sm mt-2 ml-4">{formErrors.email}</p>
+                  )}
                 </div>
                 <div>
                   <input
@@ -910,10 +1007,14 @@ export default function Home() {
                     name="whatsapp"
                     value={formData.whatsapp}
                     onChange={handleInputChange}
-                    placeholder="Seu WhatsApp"
-                    className="w-full px-6 py-4 rounded-full border-2 border-black focus:outline-none focus:ring-2 focus:ring-[#FF580D] text-lg"
+                    placeholder="Seu WhatsApp (com DDD)"
+                    maxLength={13}
+                    className={`w-full px-6 py-4 rounded-full border-2 ${formErrors.whatsapp ? 'border-red-500' : 'border-black'} focus:outline-none focus:ring-2 focus:ring-[#FF580D] text-lg`}
                     required
                   />
+                  {formErrors.whatsapp && (
+                    <p className="text-red-500 text-sm mt-2 ml-4">{formErrors.whatsapp}</p>
+                  )}
                 </div>
                 <div>
                   <select
@@ -931,6 +1032,7 @@ export default function Home() {
                     <option value="Constelador">Constelador</option>
                     <option value="Terapeuta Ocupacional">Terapeuta Ocupacional</option>
                     <option value="Terapeuta TRG">Terapeuta TRG</option>
+                    <option value="Terapeuta TRG">Estudante</option>
                     <option value="outros">Outros</option>
                   </select>
                 </div>
@@ -987,8 +1089,8 @@ export default function Home() {
               <div className="flex gap-6">
                 <a
                   href="https://www.instagram.com/vel.aesfeed/"
-                  target="_blank"
-                  rel="noopener noreferrer"
+          target="_blank"
+          rel="noopener noreferrer"
                   className="hover:text-emerald-400 transition-colors"
                   aria-label="Instagram"
                 >
@@ -1007,11 +1109,11 @@ export default function Home() {
                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                     <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
                   </svg>
-                </a>
-                <a
+        </a>
+        <a
                   href="https://wa.link/0jwtfr"
-                  target="_blank"
-                  rel="noopener noreferrer"
+          target="_blank"
+          rel="noopener noreferrer"
                   className="hover:text-emerald-400 transition-colors"
                   aria-label="WhatsApp"
                 >
