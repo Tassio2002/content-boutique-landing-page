@@ -177,7 +177,7 @@ export default function Home() {
                 <p className="text-base text-center md:text-left md:text-lg text-gray-800 leading-relaxed">
                   Com poucos cliques, <span className="font-semibold">você gera conteúdo bonito, estratégico e com a sua cara</span>. E ainda sobra tempo pro cafezinho.
                   <br />Como funciona: <br />Você fala o que precisa. <span className="font-semibold">A gente faz a mágica com IA e Canva</span>.
-                  <br />Quer carrossel? Post? Legenda que não pareça de robô? Pronto. Em minutos, você tem tudo isso com uma estética pensada pra <span className="font-semibold">psicólogos autênticos</span> — nada de design genérico estilo PowerPoint 2007.
+                  <br />Quer carrossel? Post? Roteiro pra Reels?Legenda que não pareça de robô? Pronto. Em minutos, você tem tudo isso com uma estética pensada pra <span className="font-semibold">psicólogos autênticos</span> — nada de design genérico estilo PowerPoint 2007.
                   <br />Entra logo na lista VIP e <span className="font-semibold">garanta sua vaga por R$39,90 por mês no lançamento</span>. Após o lançamento, o preço será de R$49,90 por mês.
                 </p>
               </ScrollReveal>
@@ -744,7 +744,7 @@ export default function Home() {
                   {activeFaq === 2 && (
                     <div className="px-8 pb-6">
                       <p className="text-gray-600">
-                        Sim! Todos os templates são criados exclusivamente para psicólogos, com designs modernos e profissionais que transmitem credibilidade e acolhimento.
+                        Sim! Todos os templates são criados exclusivamente para psicólogos, com designs profissionais e modernos que transmitem credibilidade e acolhimento.
                       </p>
                     </div>
                   )}
