@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Content Boutique - Seu Micro SaaS de Gestão de Conteúdo",
-  description: "Gerencie seus projetos e mantenha o momentum da sua equipe com nossa ferramenta de tracking de projetos.",
+  title: "Content Boutique: Crie Conteúdo para Instagram Psicólogos",
+  description: "Gere roteiros únicos e templates Canva para Instagram em minutos. Feito para psicólogos e terapeutas."
 };
 
 export default function RootLayout({
