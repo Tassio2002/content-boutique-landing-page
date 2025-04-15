@@ -657,7 +657,7 @@ export default function Home() {
                   </div>
                 </div>
                 <p className="mt-4 text-lg">
-                  "A arte gráfica feita por vocês  reflete completamente o meu inteiror, como que fizeram uma cópia dos meus desejos e pensamentos editada para o público. Me sinto lisonjeada em fazer parte do trabalho de vocês. Todo empenho e força que está sendo gasto ao meu favor já está fazendo uma enorme diferença nas minhas redes sociais. Sei que está sendo só o começo. Gratidão 🙏❤️"
+                  &ldquo;A arte gráfica feita por vocês  reflete completamente o meu inteiror, como que fizeram uma cópia dos meus desejos e pensamentos editada para o público. Me sinto lisonjeada em fazer parte do trabalho de vocês. Todo empenho e força que está sendo gasto ao meu favor já está fazendo uma enorme diferença nas minhas redes sociais. Sei que está sendo só o começo. Gratidão 🙏❤️&rdquo;
                 </p>
               </div>
 
@@ -672,7 +672,7 @@ export default function Home() {
                   </div>
                 </div>
                 <p className="mt-4 text-lg">
-                  "Olha tenho amado seu trabalho, é o conjunto né, você acertou MUITO no design, entendeu super bem o que eu queria e também tirou sempre minhas dúvidas, sempre atenciosa, deu excelentes ideias de conteúdo e é incrível isso pq casou direitinho com minhas expectativas."
+                  &ldquo;Olha tenho amado seu trabalho, é o conjunto né, você acertou MUITO no design, entendeu super bem o que eu queria e também tirou sempre minhas dúvidas, sempre atenciosa, deu excelentes ideias de conteúdo e é incrível isso pq casou direitinho com minhas expectativas.&rdquo;
                 </p>
               </div>
 
@@ -687,7 +687,7 @@ export default function Home() {
                   </div>
                 </div>
                 <p className="mt-4 text-lg">
-                  "Tô curtindo demais o processo kkk. As dicas de conteúdo têm me ajudado muito a organizar as ideias, criar postagens com mais intenção. Senti que o perfil tá ganhando mais identidade e o engajamento melhorou também!!"
+                  &ldquo;Tô curtindo demais o processo kkk. As dicas de conteúdo têm me ajudado muito a organizar as ideias, criar postagens com mais intenção. Senti que o perfil tá ganhando mais identidade e o engajamento melhorou também!&rdquo;
                 </p>
               </div>
             </ScrollReveal>
@@ -875,7 +875,7 @@ export default function Home() {
           </ScrollReveal>
 
           <div className="flex flex-col md:flex-row items-center justify-center gap-12">
-            <ScrollReveal className="w-full md:w-1/2 bg-[#F1FFF8] p-10 rounded-[32px] border-2 border-black">
+            <ScrollReveal className="w-full md:w-1/2 bg-[#F1FFF8] p-5 md:p-10 rounded-[32px] border-2 border-black">
               <h3 className="text-2xl font-semibold mb-8">
                 Entre na lista de espera receba <span className="font-bold text-red-600">20% de desconto</span> e comece a criar conteúdos incríveis.
               </h3>
