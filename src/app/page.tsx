@@ -952,6 +952,78 @@ export default function Home() {
                     </div>
                   )}
                 </div>
+                <div className="bg-white rounded-[32px] border-2 border-black overflow-hidden">
+                  <button
+                    className="w-full px-8 py-6 text-left flex justify-between items-center hover:bg-gray-50 transition-colors"
+                    onClick={() => setActiveFaq(activeFaq === 9 ? null : 9)}
+                  >
+                    <h3 className="font-semibold text-xl">
+                      Tem previsão de lançamento?
+                    </h3>
+                    <span className="text-2xl">{activeFaq === 9 ? '−' : '+'}</span>
+                  </button>
+                  {activeFaq === 9 && (
+                    <div className="px-8 pb-6">
+                      <p className="text-gray-600">
+                        Não temos uma data exata de lançamento, mas estamos trabalhando para que isso aconteça o mais rápido possível. Uma estimativa é que até 15 de maio já tenhamos lançado a plataforma.
+                      </p>
+                    </div>
+                  )}
+                </div>
+                <div className="bg-white rounded-[32px] border-2 border-black overflow-hidden">
+                  <button
+                    className="w-full px-8 py-6 text-left flex justify-between items-center hover:bg-gray-50 transition-colors"
+                    onClick={() => setActiveFaq(activeFaq === 10 ? null : 10)}
+                  >
+                    <h3 className="font-semibold text-xl">
+                      O desconto será apenas para o primeiro mês?
+                    </h3>
+                    <span className="text-2xl">{activeFaq === 10 ? '−' : '+'}</span>
+                  </button>
+                  {activeFaq === 10 && (
+                    <div className="px-8 pb-6">
+                      <p className="text-gray-600">
+                        Não, o desconto será aplicado em todos os meses para aqueles que se cadastrarem na lista VIP.
+                      </p>
+                    </div>
+                  )}
+                </div>
+                <div className="bg-white rounded-[32px] border-2 border-black overflow-hidden">
+                  <button
+                    className="w-full px-8 py-6 text-left flex justify-between items-center hover:bg-gray-50 transition-colors"
+                    onClick={() => setActiveFaq(activeFaq === 11 ? null : 11)}
+                  >
+                    <h3 className="font-semibold text-xl">
+                      Quais os beneficios de estar na lista VIP?
+                    </h3>
+                    <span className="text-2xl">{activeFaq === 11 ? '−' : '+'}</span>
+                  </button>
+                  {activeFaq === 11 && (
+                    <div className="px-8 pb-6">
+                      <p className="text-gray-600">
+                        Além do desconto de 20% na mensalidade, você receberá acesso excluisivo a promoções futuras (que já estamos planejando) e caso voce compre a plataforma, nós analisaremos gratuitamente o seu perfil do instagram (essa analise custa R$ 100,00) mas para você, será por nossa conta.
+                      </p>
+                    </div>
+                  )}
+                </div>
+                <div className="bg-white rounded-[32px] border-2 border-black overflow-hidden">
+                  <button
+                    className="w-full px-8 py-6 text-left flex justify-between items-center hover:bg-gray-50 transition-colors"
+                    onClick={() => setActiveFaq(activeFaq === 12 ? null : 12)}
+                  >
+                    <h3 className="font-semibold text-xl">
+                      Oferecemos outros serviços?
+                    </h3>
+                    <span className="text-2xl">{activeFaq === 12 ? '−' : '+'}</span>
+                  </button>
+                  {activeFaq === 12 && (
+                    <div className="px-8 pb-6">
+                      <p className="text-gray-600">
+                        Sim, se você quiser que a nossa equipe fique mais próxima de você, oferecemos uma grande gama de serviços, com a possibilidade de montar pacotes personalizados, por exemplo: Analise de perfil e nicho no instagram (se voce realizar a assinatura, nós faremos isso por você gratuitamente), Cronograma de conteúdos personalizado, repaginação completa do seu feed com posts personalizados para você, mentoria de negócio online, captação de clientes via threads, call de vendas que converte e muito mais.
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
             </ScrollReveal>
           </div>
